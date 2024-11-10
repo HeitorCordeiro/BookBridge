@@ -1,5 +1,12 @@
 import bcrypt  from 'bcryptjs';
 import User from '../models/user.js';
+import jwt from 'jsonwebtoken'
+import dotenv from "dotenv";
+dotenv.config();
+
+
+const secretKey = process.env.JWT_SECRET_KEY;
+
 
 export const register = async (req, res) => {
     const { username, password } = req.body;
@@ -20,10 +27,14 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
         const { username, password } = req.body;
         const user = await User.findOne({ where: { username } });
-        if (user && bcrypt.compareSync(password, user.password)) {
-          res.status(200).json()
-        } else {
-          res.status(401).json({ error: "Invalid credentials" });
+        try{
+          if(!user) return res.status(404).json({error: 'User not found'});
+          if(!bcrypt.compareSync(password, user.password)) return res.status(404).json({error: 'Invalid password'});
+          
+          const token = jwt.sign({id: user.id}, secretKey, { expiresIn: '1d'});
+          res.status(200).json({token});
+        }catch(error){
+          res.status(400).json({error: error.message});
         }
 };
 
