@@ -6,7 +6,7 @@ import { authenticateToken } from '../middlewares/authMiddleware.js'
 const clubRoutes = express.Router();
 
 clubRoutes.post('/create', authenticateToken, createClub);
-clubRoutes.get('/clubs', authenticateToken, getClubs);
+clubRoutes.get('/clubs', getClubs);
 clubRoutes.put('/modificar/:id', authenticateToken, updateClub);
 clubRoutes.delete('/delete/:id', authenticateToken, deleteClub);
 
