@@ -1,6 +1,6 @@
-import Book from '../models/books.js'
-import Club from '../models/club.js'
 import pool from '../models/db.js'
+import { setCache, getCache, clearCache } from '../cache.js'
+const cacheKey = 'booksList';
 
 export const addBook = async (req, res) => {
     const { title , club_id } = req.body;
@@ -12,6 +12,7 @@ export const addBook = async (req, res) => {
         if (existingBook.rows.length > 0) return res.status(400).json({ error: ' Book already exist' });       
         
         const book = await pool.query('INSERT INTO books (title, club_id) VALUES ($1, $2) RETURNING id', [title, club_id]);
+        await clearCache(cacheKey);
         res.status(201).json(book.rows[0]);
     }catch(error){
         res.status(400).json({error: error.message});
@@ -20,7 +21,12 @@ export const addBook = async (req, res) => {
 
 export const getBooks = async (req, res) => {
     try{
-        const books = await pool.query('SELECT * FROM books');
+        const cachedBooks = await getCache(cacheKey);
+        
+        if(cachedBooks) return res.status(200).json(cachedBooks);
+       
+        const books = await pool.query('SELECT * FROM clubs');
+        await setCache(cacheKey, books.rows);    
         res.status(200).json(books.rows);
     }catch(error){
         res.status(500).json({error: error.message});
@@ -40,8 +46,8 @@ export const updateBook = async (req, res) => {
         if (existingBook.rows.length > 0 && existingBook.rows[0].id !== parseInt(id, 10)) return res.status(400).json({ error: ' Book already exist' });       
         
         const update = await pool.query('UPDATE books SET title = $1, club_id = $2 WHERE id = $3 RETURNING *', [title, club_id, id]);
+        await clearCache(cacheKey);
         res.status(200).json(update.rows[0]);
-        console.log("entrei");
     }catch(error){
         res.status(400).json({ error: error.message });
     }
@@ -54,6 +60,7 @@ export const deleteBook = async (req, res) => {
         if(book.rows.length === 0) return res.status(404).json({error: 'Book not found'});
         
         await pool.query('DELETE FROM books WHERE id = $1', [id]);
+        await clearCache(cacheKey);
         res.status(200).json();
     }catch(error){
         res.status(400).json({ error: error.message });

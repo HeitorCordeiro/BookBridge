@@ -6,14 +6,21 @@ import reviewRoutes from './Routes/reviewRoutes.js'
 import statsRoutes from './Routes/statsRoutes.js'
 
 
-const server = express();
-server.use(express.json());
+const startServer = async () => {
+   
+    const server = express();
+    server.use(express.json());
 
-server.use('/user', userRoutes);
-server.use('/club', clubRoutes);
-server.use('/book', bookRoutes);
-server.use('/review', reviewRoutes);
-server.use('/stats', statsRoutes);
+    server.use('/user', userRoutes);
+    server.use('/club', clubRoutes);
+    server.use('/book', bookRoutes);
+    server.use('/review', reviewRoutes);
+    server.use('/stats', statsRoutes);
 
+    
+    server.listen(4026, () => {
+        console.log('Servidor rodando');
+    });
+};
 
-server.listen(4024); 
+startServer();

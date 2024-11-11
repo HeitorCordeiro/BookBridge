@@ -17,6 +17,7 @@
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.1",
+    "redis": "^4.7.0",
     "save": "^2.9.0",
     "sequelize": "^6.37.5",
     "sqlite": "^5.1.1",

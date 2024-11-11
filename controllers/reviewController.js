@@ -1,4 +1,6 @@
 import pool from '../models/db.js'
+import { setCache, getCache, clearCache } from '../cache.js'
+const cacheKey = 'reviewList';
 
 export const createReview = async (req, res) => {
     const { book_id, user_id, comment, rating } = req.body;
@@ -14,6 +16,7 @@ export const createReview = async (req, res) => {
         if (existingReview.rows.length > 0) return res.status(403).json({ error: 'User has already reviewed this book' });
 
         const review = await pool.query( 'INSERT INTO reviews (book_id, user_id, comment, rating) VALUES ($1, $2, $3, $4) RETURNING *', [book_id, user_id, comment, rating] ); 
+        await clearCache(cacheKey);
         res.status(201).json(review.rows[0]);
     }catch(error){
         res.status(400).json({ error: error.message });
@@ -22,7 +25,11 @@ export const createReview = async (req, res) => {
 
 export const getReviews = async (req, res) => { 
     try { 
+        const cacheReview = await getCache(cacheKey);
+        if(cacheReview) return res.status(200).json(cacheReview);
+
         const review = await pool.query('SELECT * FROM reviews'); 
+        await setCache(cacheKey, review.rows);
         res.status(200).json(review.rows); 
     } catch (error) { 
         res.status(500).json({ error: error.message }); 
@@ -37,6 +44,7 @@ export const updateReview = async (req, res) => {
         if (existingReview.rows.length === 0)  return res.status(404).json({ error: 'Review not found' });  
 
         const review = await pool.query( 'UPDATE reviews SET rating = $1, comment = $2 WHERE id = $3 RETURNING *', [rating, comment, id] ); 
+        await clearCache(cacheKey);
         res.status(200).json(review.rows[0]);
     } catch (error) { 
         res.status(400).json({ error: error.message }); 
@@ -50,6 +58,7 @@ export const deleteReview = async (req, res) => {
         if (existingReview.rows.length === 0)  return res.status(404).json({ error: 'Review not found' });
 
         const review = await pool.query('DELETE FROM reviews WHERE id = $1 RETURNING *', [id]);  
+        await clearCache(cacheKey);
         res.status(200).json(); 
     } catch (error) { 
         res.status(400).json({ error: error.message }); 
