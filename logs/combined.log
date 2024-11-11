@@ -1,0 +1,9 @@
+[11-11-2024 18:02:41] [32minfo[39m: Server Initialized 
+[11-11-2024 18:03:26] [32minfo[39m: Searching books 
+[11-11-2024 18:03:26] [32minfo[39m: GET /book/books 200 13ms {"req":{"url":"/book/books","headers":{"host":"localhost:4027","content-type":"application/json","user-agent":"insomnia/10.1.1","authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzMxMzUxNjc5LCJleHAiOjE3MzE0MzgwNzl9.CDow9LXFj6yo_tlJGtkSDcholzE6Z4aRoShDhZ0c0JI","accept":"*/*","content-length":"0"},"method":"GET","httpVersion":"1.1","originalUrl":"/book/books","query":{}},"res":{"statusCode":200},"responseTime":13}
+[11-11-2024 18:05:00] [32minfo[39m: try add: ${title} 
+[11-11-2024 18:05:00] [33mwarn[39m: Club not found 
+[11-11-2024 18:05:00] [32minfo[39m: POST /book/create 404 13ms {"req":{"url":"/book/create","headers":{"host":"localhost:4027","content-type":"application/json","user-agent":"insomnia/10.1.1","authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzMxMzUxNjc5LCJleHAiOjE3MzE0MzgwNzl9.CDow9LXFj6yo_tlJGtkSDcholzE6Z4aRoShDhZ0c0JI","accept":"*/*","content-length":"41"},"method":"POST","httpVersion":"1.1","originalUrl":"/book/create","query":{}},"res":{"statusCode":404},"responseTime":13}
+[11-11-2024 18:05:52] [32minfo[39m: try add: ${title} 
+[11-11-2024 18:05:52] [33mwarn[39m: Club not found 
+[11-11-2024 18:05:52] [32minfo[39m: POST /book/create 404 11ms {"req":{"url":"/book/create","headers":{"host":"localhost:4027","content-type":"application/json","user-agent":"insomnia/10.1.1","authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzMxMzUxNjc5LCJleHAiOjE3MzE0MzgwNzl9.CDow9LXFj6yo_tlJGtkSDcholzE6Z4aRoShDhZ0c0JI","accept":"*/*","content-length":"24"},"method":"POST","httpVersion":"1.1","originalUrl":"/book/create","query":{}},"res":{"statusCode":404},"responseTime":11}
