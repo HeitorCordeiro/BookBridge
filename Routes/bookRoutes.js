@@ -5,7 +5,7 @@ import { authenticateToken } from '../middlewares/authMiddleware.js'
 const bookRoutes = express.Router();
 
 bookRoutes.post('/create', authenticateToken, addBook);
-bookRoutes.get('/books', authenticateToken, getBooks);
+bookRoutes.get('/books', getBooks);
 bookRoutes.put('/modificar/:id', authenticateToken, updateBook);
 bookRoutes.delete('/delete/:id', authenticateToken, deleteBook);
 

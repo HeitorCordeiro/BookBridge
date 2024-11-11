@@ -29,33 +29,33 @@ const createTables = async () => {
                 description TEXT
             )`
         )
-
+        
         await pool.query(
             `CREATE TABLE IF NOT EXISTS books(
                 id SERIAL PRIMARY KEY,
                 title VARCHAR(255) NOT NULL,
-                clubId INTEGER REFERENCES clubs(id) ON DELETE CASCADE
-            )`
-        )
-
-        await pool.query(
-            `CREATE TABLE IF NOT EXISTS reviews(
-                id SERIAL PRIMARY KEY,
-                bookId INTERGER REFERENCES books(id) ON DELETECASCADE,
-                userINTERGER REFERENCES users(id) ON DELETE CASCADE,
-                rating INTERGER NOT NULL CHECK (rating >= 1 AND rating <=5),
-                comment TEXT
-            )`
-        )
-
-        await pool.query(
-            `CREATE TABLE IF NOT EXISTS members(
-                useId INTERGER REFERENCES books(id) ON DELETE CASCADE,
-                clubID INTERGER REFERENCES clubs(id) ON DELETE CASCADE,
-                PRIMARY KEY (userId, clubId)
-            )`
-        )
-
+                club_id INTEGER REFERENCES clubs(id) ON DELETE CASCADE
+                )`
+            )
+            
+            await pool.query(
+                `CREATE TABLE IF NOT EXISTS reviews(
+                    id SERIAL PRIMARY KEY,
+                    book_id INTEGER REFERENCES books(id) ON delete CASCADE,
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <=5),
+                	comment TEXT
+                );`
+            )
+            
+            await pool.query(
+                `CREATE TABLE IF NOT EXISTS members(
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    club_id INTEGER REFERENCES clubs(id) ON DELETE CASCADE,
+                    PRIMARY KEY (user_id, club_id)
+                    );`
+                )
+                
         console.log('tabelas criadas')
     }catch(error){
         console.log('tabelas nao criadas')

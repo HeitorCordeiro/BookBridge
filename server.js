@@ -3,6 +3,7 @@ import userRoutes from './Routes/userRoutes.js'
 import clubRoutes from './Routes/clubRoutes.js'
 import bookRoutes from './Routes/bookRoutes.js'
 import reviewRoutes from './Routes/reviewRoutes.js'
+import statsRoutes from './Routes/statsRoutes.js'
 
 
 const server = express();
@@ -12,6 +13,7 @@ server.use('/user', userRoutes);
 server.use('/club', clubRoutes);
 server.use('/book', bookRoutes);
 server.use('/review', reviewRoutes);
+server.use('/stats', statsRoutes);
 
 
-server.listen(4020); 
+server.listen(4024); 

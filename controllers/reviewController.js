@@ -1,20 +1,19 @@
-import pool from '../models/dbs.js'
+import pool from '../models/db.js'
 
 export const createReview = async (req, res) => {
-    const { bookId, userId, comment, rating } = req.body;
+    const { book_id, user_id, comment, rating } = req.body;
     try{
-        const club = await pool.query( 'SELECT clubId FROM books WHERE id = $1', [bookId] ); 
+        const club = await pool.query( 'SELECT club_id FROM books WHERE id = $1', [book_id] ); 
         if (club.rows.length === 0) return res.status(400).json({ error: 'Book not found' });
 
-        const clubId = club.rows[0].clubId; 
-
-        const member = await pool.query( 'SELECT * FROM memberships WHERE userId = $1 AND clubId = $2', [userId, clubId] ); 
+        const club_id = club.rows[0].club_id;
+        const member = await pool.query( 'SELECT * FROM members WHERE user_id = $1 AND club_id = $2', [user_id, club_id] ); 
         if (member.rows.length === 0)  return res.status(403).json({ error: 'User is not a member of the club' });
 
-        const existingReview = await pool.query( 'SELECT * FROM reviews WHERE bookId = $1 AND userId = $2 AND clubID = $3', [bookId, userId, clubId] ); 
+        const existingReview = await pool.query( 'SELECT * FROM reviews WHERE book_id = $1 AND user_id = $2', [book_id, user_id] ); 
         if (existingReview.rows.length > 0) return res.status(403).json({ error: 'User has already reviewed this book' });
 
-        const review = await pool.query( 'INSERT INTO reviews (bookId, userId, comment, rating) VALUES ($1, $2, $3, $4) RETURNING *', [bookId, userId, comment, rating] ); 
+        const review = await pool.query( 'INSERT INTO reviews (book_id, user_id, comment, rating) VALUES ($1, $2, $3, $4) RETURNING *', [book_id, user_id, comment, rating] ); 
         res.status(201).json(review.rows[0]);
     }catch(error){
         res.status(400).json({ error: error.message });
